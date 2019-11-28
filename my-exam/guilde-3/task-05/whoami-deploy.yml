@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoami
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      type: app
+      service: whoami
+  template:
+    metadata:
+      labels:
+        type: app
+        service: whoami
+    spec:
+      containers:
+      - name: whoami
+        image: subicura/whoami-redis:1
+        env:
+        - name: REDIS_HOST
+          value: 'redis'
+        - name: REDIS_PORT
+          value: '6379'
+
+---
+#외부로 통신을 하기 위한 NodePort를 부착
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami
+spec:
+  type: NodePort
+  ports:
+  - port: 4567
+    protocol: TCP
+  selector:
+    type: app
+    service: whoami
