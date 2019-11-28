@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: whoami
+  labels:
+    type: app
+spec:
+  containers:
+  - name: app
+    image: subicura/whoami:1
+    # 처음에 띄우고 나서 헬스 체크 하는 방법
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 4567 
+    # 처음에 컨테이너를 띄울때 체크
+    readinessProbe:
+      httpGet:
+        path: /
+        port: 4567 
