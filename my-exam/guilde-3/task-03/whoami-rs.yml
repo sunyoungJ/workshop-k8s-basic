@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: whoami-rs
+spec:
+  # matchLabels의 조건에 해당하는 Pod이 replicas의 갯수를 만족하는지?
+  replicas: 1
+  selector:
+    matchLabels:
+      type: app
+      service: whoami
+  # 만족하지 못하면, 아래의 데이터를 이용해서 생성한다.
+  template:
+    metadata:
+      labels:
+        type: app
+        service: whoami
+    spec:
+      containers:
+      - name: whoami
+        image: subicura/whoami:1
+
