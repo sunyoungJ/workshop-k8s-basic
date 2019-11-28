@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      type: db
+      db: mongodb
+  template:
+    metadata:
+      labels:
+        type: db
+        db: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:4
+        ports:
+        - containerPort: 27017
+          protocol: TCP
+
+---
+# Service for ClusterIP
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+spec:
+  ports:
+  - port: 27017
+    protocol: TCP 
+  selector:
+    type: db
+    db: mongodb
+
